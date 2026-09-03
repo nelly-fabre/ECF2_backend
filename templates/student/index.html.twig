@@ -1,41 +1,49 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Student index{% endblock %}
+{% block title %}Liste des stagiaires{% endblock %}
 
 {% block body %}
-    <h1>Student index</h1>
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Stagiaires</h1>
+        <a href="{{ path('app_student_new') }}" class="btn btn-primary">Ajouter un stagiaire</a>
+    </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>IdAfpa</th>
-                <th>FamilyName</th>
-                <th>FirstName</th>
-                <th>Picture</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
         {% for student in students %}
-            <tr>
-                <td>{{ student.id }}</td>
-                <td>{{ student.idAfpa }}</td>
-                <td>{{ student.familyName }}</td>
-                <td>{{ student.firstName }}</td>
-                <td>{{ student.picture }}</td>
-                <td>
-                    <a href="{{ path('app_student_show', {'id': student.id}) }}">show</a>
-                    <a href="{{ path('app_student_edit', {'id': student.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    {% if student.picture %}
+                        <img src="{{ asset('uploads/students/' ~ student.picture) }}"
+                             class="card-img-top"
+                             style="height: 200px; object-fit: cover;"
+                             alt="Photo de {{ student.firstName }} {{ student.familyName }}">
+                    {% else %}
+                        <div class="card-img-top d-flex align-items-center justify-content-center bg-secondary text-white"
+                             style="height: 200px;">
+                            Pas de photo
+                        </div>
+                    {% endif %}
 
-    <a href="{{ path('app_student_new') }}">Create new</a>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ student.firstName }} {{ student.familyName }}</h5>
+                        <p class="card-text text-muted">N° Afpa : {{ student.idAfpa }}</p>
+                    </div>
+
+                    <div class="card-footer d-flex justify-content-between bg-white border-top-0">
+                        <a href="{{ path('app_student_show', {'id': student.id}) }}" class="btn btn-sm btn-outline-secondary">Voir</a>
+                        <a href="{{ path('app_student_edit', {'id': student.id}) }}" class="btn btn-sm btn-outline-primary">Modifier</a>
+                        <form method="post" action="{{ path('app_student_delete', {'id': student.id}) }}"
+                              onsubmit="return confirm('Supprimer ce stagiaire ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ student.id) }}">
+                            <button class="btn btn-sm btn-outline-danger">Supprimer</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <p>Aucun stagiaire enregistré.</p>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}
