@@ -27,6 +27,20 @@ class Student
     #[ORM\Column(name: 'student_picture', length: 255, nullable: true)]
     private ?string $picture = null;
 
+    #[ORM\Column(name: 'student_active')]
+    private bool $active = true;
+
+    public function isActive(): bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): static
+    {
+        $this->active = $active;
+        return $this;
+    }
+
     /**
      * @var Collection<int, Absence>
      */

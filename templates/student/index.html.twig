@@ -26,18 +26,29 @@
                     {% endif %}
 
                     <div class="card-body">
+                         {% if not student.active %}
+                            <span class="badge bg-secondary mb-1">Archivé</span>
+                        {% endif %}
                         <h5 class="card-title">{{ student.firstName }} {{ student.familyName }}</h5>
                         <p class="card-text text-muted">N° Afpa : {{ student.idAfpa }}</p>
                     </div>
 
-                    <div class="card-footer d-flex justify-content-between bg-white border-top-0">
+                    <div class="card-footer d-flex justify-content-between bg-white p-2">
                         <a href="{{ path('app_student_show', {'id': student.id}) }}" class="btn btn-sm btn-outline-secondary">Voir</a>
                         <a href="{{ path('app_student_edit', {'id': student.id}) }}" class="btn btn-sm btn-outline-primary">Modifier</a>
-                        <form method="post" action="{{ path('app_student_delete', {'id': student.id}) }}"
-                              onsubmit="return confirm('Supprimer ce stagiaire ?');">
-                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ student.id) }}">
-                            <button class="btn btn-sm btn-outline-danger">Supprimer</button>
-                        </form>
+
+                        {% if student.active %}
+                            <form method="post" action="{{ path('app_student_delete', {'id': student.id}) }}"
+                                    onsubmit="return confirm('Archiver ce stagiaire ?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ student.id) }}">
+                                <button class="btn btn-sm btn-outline-danger">Archiver</button>
+                            </form>
+                        {% else %}
+                            <form method="post" action="{{ path('app_student_restore', {'id': student.id}) }}">
+                                <input type="hidden" name="_token" value="{{ csrf_token('restore' ~ student.id) }}">
+                                <button class="btn btn-sm btn-outline-success">Réactiver</button>
+                            </form>
+                        {% endif %}
                     </div>
                 </div>
             </div>
