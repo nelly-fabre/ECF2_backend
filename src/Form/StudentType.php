@@ -4,8 +4,10 @@ namespace App\Form;
 
 use App\Entity\Student;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 
 class StudentType extends AbstractType
 {
@@ -15,7 +17,22 @@ class StudentType extends AbstractType
             ->add('idAfpa')
             ->add('familyName')
             ->add('firstName')
-            ->add('picture')
+            ->add('pictureFile', FileType::class, [
+                'label' => 'Photo (JPEG/PNG/WEBP, 5 Mo max)',
+                'mapped' => false,
+                'required' => false,
+                'constraints' => [
+                    new File(
+                        maxSize: '5M',
+                        mimeTypes: [
+                            'image/jpeg',
+                            'image/png',
+                            'image/webp',
+                        ],
+                        mimeTypesMessage: 'Veuillez entrer un format d\'image valide (JPEG, PNG or WebP).',
+                    ),
+                ],
+            ])
         ;
     }
 
