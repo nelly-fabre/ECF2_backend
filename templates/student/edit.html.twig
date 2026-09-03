@@ -1,13 +1,21 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Student{% endblock %}
+{% block title %}Modifier {{ student.firstName }} {{ student.familyName }}{% endblock %}
 
 {% block body %}
-    <h1>Edit Student</h1>
+<div class="container py-4">
+    <h1 class="mb-4">Modifier {{ student.firstName }} {{ student.familyName }}</h1>
 
-    {{ include('student/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ include('student/_form.html.twig') }}
 
-    <a href="{{ path('app_student_index') }}">back to list</a>
+    <hr class="my-4">
 
-    {{ include('student/_delete_form.html.twig') }}
+    <form method="post" action="{{ path('app_student_delete', {'id': student.id}) }}"
+          onsubmit="return confirm('Supprimer ce stagiaire ?');">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ student.id) }}">
+        <button class="btn btn-outline-danger">Supprimer ce stagiaire</button>
+    </form>
+
+    <a href="{{ path('app_student_index') }}" class="btn btn-link mt-3">← Retour à la liste</a>
+</div>
 {% endblock %}

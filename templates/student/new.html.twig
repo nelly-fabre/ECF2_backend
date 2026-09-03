@@ -1,11 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Student{% endblock %}
+{% block title %}Nouveau stagiaire{% endblock %}
 
 {% block body %}
-    <h1>Create new Student</h1>
+<div class="container py-4" >
+    <h1 class="mb-4">Nouveau stagiaire</h1>
 
     {{ include('student/_form.html.twig') }}
 
-    <a href="{{ path('app_student_index') }}">back to list</a>
+    <a href="{{ path('app_student_index') }}" class="btn btn-link mt-3">← Retour à la liste</a>
+</div>
 {% endblock %}

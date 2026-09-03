@@ -1,4 +1,27 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+    <div class="mb-3">
+        {{ form_label(form.idAfpa, 'N° Afpa') }}
+        {{ form_widget(form.idAfpa, {'attr': {'class': 'form-control w-50'}}) }}
+        {{ form_errors(form.idAfpa) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.familyName, 'Nom') }}
+        {{ form_widget(form.familyName, {'attr': {'class': 'form-control w-50'}}) }}
+        {{ form_errors(form.familyName) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.firstName, 'Prénom') }}
+        {{ form_widget(form.firstName, {'attr': {'class': 'form-control w-50'}}) }}
+        {{ form_errors(form.firstName) }}
+    </div>
+
+    <div class="mb-3">
+        {{ form_label(form.pictureFile) }}
+        {{ form_widget(form.pictureFile, {'attr': {'class': 'form-control w-50'}}) }}
+        {{ form_errors(form.pictureFile) }}
+    </div>
+
+    <button class="btn btn-primary">Enregistrer</button>
 {{ form_end(form) }}
