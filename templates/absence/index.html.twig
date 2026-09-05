@@ -1,39 +1,62 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Absence index{% endblock %}
+{% block title %}Liste des absences{% endblock %}
 
 {% block body %}
-    <h1>Absence index</h1>
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Absences</h1>
+        <a href="{{ path('app_absence_new') }}" class="btn btn-primary">Déclarer une absence</a>
+    </div>
 
-    <table class="table">
+    <table class="table table-hover align-middle">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>DateStart</th>
-                <th>DateEnd</th>
-                <th>Document</th>
-                <th>actions</th>
+                <th>Stagiaire</th>
+                <th>Motif</th>
+                <th>Date de début</th>
+                <th>Date de fin</th>
+                <th>Justificatif</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
-        {% for absence in absences %}
-            <tr>
-                <td>{{ absence.id }}</td>
-                <td>{{ absence.dateStart ? absence.dateStart|date('Y-m-d') : '' }}</td>
-                <td>{{ absence.dateEnd ? absence.dateEnd|date('Y-m-d') : '' }}</td>
-                <td>{{ absence.document }}</td>
-                <td>
-                    <a href="{{ path('app_absence_show', {'id': absence.id}) }}">show</a>
-                    <a href="{{ path('app_absence_edit', {'id': absence.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">no records found</td>
-            </tr>
-        {% endfor %}
+            {% for absence in absences %}
+                <tr>
+                    <td>{{ absence.student.firstName }} {{ absence.student.familyName }}</td>
+                    <td>
+                        {% if absence.type.name == 'sans motif' %}
+                            <span class="badge bg-danger">{{ absence.type.name }}</span>
+                        {% else %}
+                            <span class="badge bg-secondary">{{ absence.type.name }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ absence.dateStart|date('d/m/Y') }}</td>
+                    <td>{{ absence.dateEnd|date('d/m/Y') }}</td>
+                    <td>
+                        {% if absence.document %}
+                            <a href="{{ asset('uploads/documents/' ~ absence.document) }}" target="_blank">Voir le PDF</a>
+                        {% else %}
+                            <span class="text-muted">—</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-end">
+                        <a href="{{ path('app_absence_show', {'id': absence.id}) }}" class="btn btn-sm btn-outline-secondary">Voir</a>
+                        <a href="{{ path('app_absence_edit', {'id': absence.id}) }}" class="btn btn-sm btn-outline-primary">Modifier</a>
+                        <form method="post" action="{{ path('app_absence_delete', {'id': absence.id}) }}"
+                              class="d-inline"
+                              onsubmit="return confirm('Supprimer cette absence ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ absence.id) }}">
+                            <button class="btn btn-sm btn-outline-danger">Supprimer</button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6">Aucune absence enregistrée.</td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
-
-    <a href="{{ path('app_absence_new') }}">Create new</a>
+</div>
 {% endblock %}

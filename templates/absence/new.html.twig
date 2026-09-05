@@ -1,11 +1,13 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Absence{% endblock %}
+{% block title %}Déclarer une absence{% endblock %}
 
 {% block body %}
-    <h1>Create new Absence</h1>
+<div class="container py-4" style="max-width: 600px;">
+    <h1 class="mb-4">Déclarer une absence</h1>
 
     {{ include('absence/_form.html.twig') }}
 
-    <a href="{{ path('app_absence_index') }}">back to list</a>
+    <a href="{{ path('app_absence_index') }}" class="btn btn-link mt-3">← Retour à la liste</a>
+</div>
 {% endblock %}

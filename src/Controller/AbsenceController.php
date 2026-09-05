@@ -36,6 +36,8 @@ final class AbsenceController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $this->handleDocumentUpload($form, $absence);
+
             $entityManager->persist($absence);
             $entityManager->flush();
 
@@ -63,6 +65,8 @@ final class AbsenceController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $this->handleDocumentUpload($form, $absence);
+
             $entityManager->flush();
 
             return $this->redirectToRoute('app_absence_index', [], Response::HTTP_SEE_OTHER);
@@ -98,7 +102,8 @@ final class AbsenceController extends AbstractController
             return;
         }
 
-        $newFilename = uniqid('doc_', true) . '.pdf';
+        $extension = $documentFile->guessExtension() ?? 'bin';
+        $newFilename = uniqid('doc_', true) . '.' . $extension;
 
         try {
             $documentFile->move(
